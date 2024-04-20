@@ -1,5 +1,5 @@
 import { Provider } from 'react-redux';
-import store, { persistor } from '../redux/store';
+import store, { persistor } from '../redux/store.js';
 import { PersistGate } from 'redux-persist/integration/react';
 import ContactForm from './contactForm/ContactForm';
 import ContactList from './contactList/ContactList';
