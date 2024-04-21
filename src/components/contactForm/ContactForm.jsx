@@ -3,7 +3,12 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { nanoid } from 'nanoid';
 
-const ContactForm = ({ addContact }) => {
+import { useDispatch } from 'react-redux';
+import { addContact } from '../../redux/contactsSlice'; 
+
+const ContactForm = () => {
+  const dispatch = useDispatch();
+
   const initialValues = {
     name: '',
     number: ''
@@ -24,7 +29,7 @@ const ContactForm = ({ addContact }) => {
       name: values.name,
       number: values.number
     };
-    addContact(newContact);
+    dispatch(addContact(newContact)); // Füge den Kontakt zum Redux-Store hinzu
     resetForm();
   };
 
@@ -34,22 +39,27 @@ const ContactForm = ({ addContact }) => {
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      <Form className="contact-form">
-        <div>
-        <p>Name</p>
-          <Field type="text" name="name" placeholder="Name" />
-          <ErrorMessage name="name" component="div" />
-        </div>
-        <div>
-        <p>Number</p>
-          <Field type="text" name="number" placeholder="Number" />
-          <ErrorMessage name="number" component="div" className="error-form"/>
-        </div>
-        <button type="submit" className="button-add-contact">Add Contact</button>
-      </Form>
+      {({ isSubmitting }) => (
+        <Form className="contact-form">
+          <div>
+            <p>Name</p>
+            <Field type="text" name="name" placeholder="Name" />
+            <ErrorMessage name="name" component="div" />
+          </div>
+          <div>
+            <p>Number</p>
+            <Field type="text" name="number" placeholder="Number" />
+            <ErrorMessage name="number" component="div" className="error-form"/>
+          </div>
+          <button type="submit" className="button-add-contact" disabled={isSubmitting}>
+            {isSubmitting ? 'Adding...' : 'Add Contact'}
+          </button>
+        </Form>
+      )}
     </Formik>
   );
 };
 
 export default ContactForm;
+
 
